@@ -111,7 +111,7 @@
         },
         getFile: function (event) {
             //put the file in the image
-            this.newRecord.image = event.target.files[0];
+            
         },
         submitLogin: async function () {
             this.showError = false;
@@ -149,106 +149,32 @@
         },
         createArtist: async function () {
             //create the url
-            const url = `${this.baseUrl}artists`;
+
             //create the headers => token
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
-                }
-            };
+            
             //create the data
-            const data = {
-                name: this.newArtist
-            };
+            
             //do the post
-            await axios.post(url, data, config)
-                .then(response => {
-                    console.log(response.data);
-                    this.artists.push({
-                        id: response.data.id,
-                        name: response.data.name,
-                    });
-                    this.newArtist = "";
-                    this.toggleModal("addArtistModal");
-                })
-                .catch(error => {
-                    console.log(error);
-                })
         },
         deleteArtist: async function (id) {
             //confirm delete
-            if (confirm("Delete artist?")) {
-                //build the url
-                const url = `${this.baseUrl}artists/${id}`;
-                //set the headers => token
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem("token")}`
-                    }
-                };
-                //send the request
-                await axios.delete(url, config)
-                    .then(response => {
-                        console.log(response.data);
-                        //remove artist from list
-                        this.artists = this.artists.filter(el => el.id !== id);
-                    }).catch(error => console.log(error));
-            };
+
+            //send the request
+            
         },
         createRecord: async function () {
             //validate => moejezelfdoen
+
             //create formData
-            const formData = new FormData();
-            formData.append("Title", this.newRecord.title);
-            formData.append("Price", this.newRecord.price);
-            formData.append("GenreId", this.newRecord.genreId);
-            formData.append("ArtistId", this.newRecord.artistId);
-            formData.append("Image", this.newRecord.image);
-            //array of propertyIds
-            this.newRecord.propertyIds.forEach((el, index) =>
-                formData.append(`PropertyIds[${index}]`, el));
+
             //create the url
-            const url = `${this.baseUrl}records/image`;
-            //create the config => token
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
-                }
-            };
+
             //post the formdata
-            this.loading = true;
-            await axios.post(url, formData, config)
-                .then(response => {
-                    console.log(response);
-                    //add new record to list
-                    this.records.push({
-                        id: response.data.id,
-                        name: response.data.name,
-                        imageUrl: response.data.imageUrl
-                    });
-                    this.toggleModal("addRecordModal");
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-            this.loading = false;
         },
         //auth functions
         registerUser: async function () {
-            const registerDto = {
-                "email": this.username,
-                "password": this.password,
-                "birthday": this.dateOfBirth
-            }
-            await axios.post(this.registerUrl, registerDto)
-                .then(response => response)
-                .catch(error => {
-                    this.showError = true;
-                    this.errorMessage = error.response.data.errors;
-                })
-            this.username = "";
-            this.password = "";
-            this.dateOfBirth = new Date().toLocaleDateString('en-CA');
+            
+            //this.dateOfBirth = new Date().toLocaleDateString('en-CA');
         },
         submitLogout: function () {
             this.tokenObject = "";
@@ -259,31 +185,20 @@
             this.adminProductsVisible = false;
         },
         showEditArtistModal: function (id) {
+            //get the selected artist
             this.selectedArtist = this.artists.find(el => el.id === id);
+            //show the modal
             this.toggleModal("editArtistModal");
         },
         updateArtist: async function () {
-            //call the update endpoint
-            const url = `${this.baseUrl}artists`;
+            //build the update endpoint
+
             //set the data
-            data = {
-                "name": this.selectedArtist.name,
-                "id": this.selectedArtist.id
-            }
+            
             //config headers => token
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
-                }
-            };
-            //call the api
-            await axios.put(url, data, config)
-                .then(response => {
-                    console.log(response);
-                    this.artists.find(el => el.id === this.selectedArtist.id)
-                        .name = this.selectedArtist.name;
-                    this.toggleModal("editArtistModal");
-                }).catch(error => console.log(error));
+            
+            //call the api with axios put
+            
         },
         toggleModal: function (modalId) {
             $(`#${modalId}`).modal('toggle');
