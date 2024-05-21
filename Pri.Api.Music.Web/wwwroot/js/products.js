@@ -118,11 +118,11 @@
                 })
                 .catch(error => {
                     console.log(error);
-                })
+                });
         },
         getFile: function (event) {
             //put the file in the image
-            
+            this.newRecord.image = event.target.files[0];
         },
         
         createArtist: async function () {
@@ -158,35 +158,103 @@
         },
         deleteArtist: async function (id) {
             //confirm delete
-
+            if (confirm("Delete artist?")) {
+                const url = `${this.baseUrl}artists/${id}`;
+                const configuration = {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`
+                    }
+                };
+                await axios.delete(url, configuration)
+                    .then(response => {
+                        console.log(response);
+                        this.artists = this.artists.filter(el => el.id != id);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
             //send the request
             
         },
+
         createRecord: async function () {
             //validate => moejezelfdoen
-
+            if ($('#newRecordTitle')[0].value === '') {
+                alert("Geef title"); //GEEN ALERTS GEBRUIKEN, ENKEL OM TE TESTEN!!
+            }
             //create formData
-
+            const formData = new FormData();
+            //append the form values
+            formData.append("Title", this.newRecord.title);
+            formData.append("Price", this.newRecord.price);
+            formData.append("GenreId", this.newRecord.genreId);
+            formData.append("ArtistId", this.newRecord.artistId);
+            formData.append("Image", this.newRecord.image);
+            this.newRecord.propertyIds.forEach((el, index) => {
+                formData.append(`PropertyIds[${index}]`, el);
+            });
+            
             //create the url
-
+            const url = `${this.baseUrl}Records/Image`
+            //headers
+            const configuration = {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            };
             //post the formdata
+            await axios.post(url, formData, configuration)
+                .then(response => {
+                    console.log(response);
+                    //empty the newRecord properties.
+                    this.toggleModal("addRecordModal");
+                    //this.getRecords();
+                    this.records.push({
+                        id: response.data.id,
+                        name: response.data.artist.name,
+                        imageUrl: response.data.imageUrl
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+
         },
         
         showEditArtistModal: function (id) {
             //get the selected artist
-            
+            this.selectedArtist = this.artists.find(el => el.id === id);
             //show the modal
             this.toggleModal("editArtistModal");
         },
         updateArtist: async function () {
             //build the update endpoint
-
+            const url = `${this.baseUrl}Artists`;
             //set the data
-            
+            const data = {
+                Name: this.selectedArtist.name,
+                Id: this.selectedArtist.id
+            };
             //config headers => token
-            
+            const configuration = {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                }
+            };
             //call the api with axios put
-            
+            await axios.put(url, data, configuration)
+                .then(response => {
+                    console.log(response);
+                    this.toggleModal("editArtistModal");
+                    //this.getRecords();
+                    this.artists.find(el => el.id === selectedArtist.id).name = this.selectedArtist.name;
+
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+                
         },
         toggleModal: function (modalId) {
             $(`#${modalId}`).modal('toggle');
