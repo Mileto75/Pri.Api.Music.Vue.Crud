@@ -149,7 +149,7 @@
         
         showEditArtistModal: function (id) {
             //get the selected artist
-            this.selectedArtist = this.artists.find(el => el.id === id);
+            
             //show the modal
             this.toggleModal("editArtistModal");
         },
