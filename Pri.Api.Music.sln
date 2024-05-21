@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pri.Api.Music.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pri.Api.Music.Api", "Pri.Api.Music.Api\Pri.Api.Music.Api.csproj", "{557ADE88-BE8D-478A-B029-A43591F45FB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pri.Api.Music.Web", "Pri.Api.Music.Web\Pri.Api.Music.Web.csproj", "{E521AE8D-4F3F-42D3-9F14-A44EAA3E17D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pri.Api.Music.Web", "Pri.Api.Music.Web\Pri.Api.Music.Web.csproj", "{E521AE8D-4F3F-42D3-9F14-A44EAA3E17D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

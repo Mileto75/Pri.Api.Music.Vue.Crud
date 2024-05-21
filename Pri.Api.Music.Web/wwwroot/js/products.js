@@ -9,10 +9,13 @@
         password: "",
         loading: false,
         showError: false,
+        registerError:false,
         artists: [],
         records: [],
         loggedIn: false,
         errorMessage: "",
+        hasMessage: false,
+        message: "",
         newRecord: {
             title: "",
             price: "",
@@ -124,12 +127,34 @@
         
         createArtist: async function () {
             //create the url
-
+            const url = `${this.baseUrl}artists`;
             //create the headers => token
-            
+            const configuration = {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
+                }
+            };
             //create the data
-            
+            const artistDto = {
+                Name: this.newArtist
+            };
             //do the post
+            await axios.post(url, artistDto,configuration)
+                .then(response => {
+                    console.log(response);
+                    //reload from api
+                    //this.getArtists();
+                    //or update UI from 201 result
+                    this.artists.push({
+                        id: response.data.id,
+                        name: response.data.name
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            this.toggleModal("addArtistModal");
+            
         },
         deleteArtist: async function (id) {
             //confirm delete
@@ -202,7 +227,32 @@
             this.getProperties();
         },
         registerUser: async function () {
-
+            this.registerError = false;
+            this.hasMessage = false;
+            //validate => moejezelfdoen
+            //get the data
+            const registerDto = {
+                Username: this.newUser.username,
+                Password: this.newUser.password,
+                RepeatPassword: this.newUser.repeatPassword,
+                Firstname: this.newUser.firstname,
+                Lastname: this.newUser.lastname,
+                DateOfBirth: this.newUser.dateOfBirth,
+            };
+            //do a post request
+            await axios.post(this.registerUrl, registerDto)
+                .then(response => {
+                    console.log(response);
+                    this.hasMessage = true;
+                    this.message = response.data;
+                    //this.toggleModal("registerModal");
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.registerError = true;
+                    this.errorMessage = error.response.data.errors;
+                })
+            
             //this.dateOfBirth = new Date().toLocaleDateString('en-CA');
         },
         submitLogout: function () {

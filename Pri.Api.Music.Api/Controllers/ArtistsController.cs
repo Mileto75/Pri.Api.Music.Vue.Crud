@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pri.Api.Music.Api.Dtos;
 using Pri.Api.Music.Core.Interfaces.Services;
 
@@ -51,6 +52,7 @@ namespace Pri.Api.Music.Api.Controllers
             return NotFound(result.Errors);
         }
         [HttpPost]
+        [Authorize(Policy ="Admin")]
         public async Task<IActionResult> Create(ArtistRequestDto artistRequestDto)
         {
             var result = await _artistService.CreateAsync(artistRequestDto.Name);
