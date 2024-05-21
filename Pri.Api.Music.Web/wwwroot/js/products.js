@@ -21,6 +21,14 @@
             artistId: "",
             propertyIds: []
         },
+        newUser: {
+            username: "",
+            password: "",
+            repeatPassword: "",
+            firstname: "",
+            lastname: "",
+            dateOfBirth: new Date().toLocaleDateString('en-CA'),
+        },
         genres: [],
         properties: [],
         token: "",
@@ -113,6 +121,52 @@
             //put the file in the image
             
         },
+        
+        createArtist: async function () {
+            //create the url
+
+            //create the headers => token
+            
+            //create the data
+            
+            //do the post
+        },
+        deleteArtist: async function (id) {
+            //confirm delete
+
+            //send the request
+            
+        },
+        createRecord: async function () {
+            //validate => moejezelfdoen
+
+            //create formData
+
+            //create the url
+
+            //post the formdata
+        },
+        
+        showEditArtistModal: function (id) {
+            //get the selected artist
+            this.selectedArtist = this.artists.find(el => el.id === id);
+            //show the modal
+            this.toggleModal("editArtistModal");
+        },
+        updateArtist: async function () {
+            //build the update endpoint
+
+            //set the data
+            
+            //config headers => token
+            
+            //call the api with axios put
+            
+        },
+        toggleModal: function (modalId) {
+            $(`#${modalId}`).modal('toggle');
+        },
+        //auth functions
         submitLogin: async function () {
             this.showError = false;
             const loginDto = {
@@ -147,33 +201,8 @@
             this.getGenres();
             this.getProperties();
         },
-        createArtist: async function () {
-            //create the url
-
-            //create the headers => token
-            
-            //create the data
-            
-            //do the post
-        },
-        deleteArtist: async function (id) {
-            //confirm delete
-
-            //send the request
-            
-        },
-        createRecord: async function () {
-            //validate => moejezelfdoen
-
-            //create formData
-
-            //create the url
-
-            //post the formdata
-        },
-        //auth functions
         registerUser: async function () {
-            
+
             //this.dateOfBirth = new Date().toLocaleDateString('en-CA');
         },
         submitLogout: function () {
@@ -183,25 +212,6 @@
             this.isAdmin = false;
             this.adminArtistsVisible = false;
             this.adminProductsVisible = false;
-        },
-        showEditArtistModal: function (id) {
-            //get the selected artist
-            this.selectedArtist = this.artists.find(el => el.id === id);
-            //show the modal
-            this.toggleModal("editArtistModal");
-        },
-        updateArtist: async function () {
-            //build the update endpoint
-
-            //set the data
-            
-            //config headers => token
-            
-            //call the api with axios put
-            
-        },
-        toggleModal: function (modalId) {
-            $(`#${modalId}`).modal('toggle');
         },
         decodeToken: function (token) {
             var base64Url = token.split('.')[1];

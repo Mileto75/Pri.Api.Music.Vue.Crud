@@ -32,6 +32,7 @@
                             <input v-model="username" class="form-control me-2" type="email" placeholder="e-mail" aria-label="E-mail">
                             <input v-model="password" class="form-control me-2" type="password" placeholder="password" aria-label="Password">
                             <button class="btn btn-outline-primary" type="submit">Login</button>
+                            <button class="btn btn-outline-info" v-on:click="toggleModal('registerModal')" type="button">Register</button>
                         </form>
                         <div class="d-inline-flex">
                             <div v-if="loggedIn" class="me-2">
@@ -50,6 +51,52 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </div>
+    @* Register form modal  *@
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalTitle">Register</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--Modal content-->
+                    <form>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input v-model="newUser.username" type="Email" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" v-model="newUser.password" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Repeat password</label>
+                            <input type="password" v-model="newUser.repeatPassword" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Firstname</label>
+                            <input type="text" v-model="newUser.firstname" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Lastname</label>
+                            <input type="text" v-model="newUser.lastname" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Date of birth</label>
+                            <input type="date" v-model="newUser.dateOfBirth" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" v-on:click="toggleModal('registerModal')" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                        </div>
+                </div>
+        </div>
     </div>
 </div>
     <footer class="border-top footer text-muted">
