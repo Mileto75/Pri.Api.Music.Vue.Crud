@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Pri.Api.Music.Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Pri.Api.Music.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div id="app">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Pri.Api.Music.Web</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                    <div id="loginForm" class="d-flex flex-column">
+                        <form v-if="!loggedIn" v-on:submit.prevent="submitLogin" class="d-flex" role="login">
+                            <input v-model="username" class="form-control me-2" type="email" placeholder="e-mail" aria-label="E-mail">
+                            <input v-model="password" class="form-control me-2" type="password" placeholder="password" aria-label="Password">
+                            <button class="btn btn-outline-primary" type="submit">Login</button>
+                        </form>
+                        <div class="d-inline-flex">
+                            <div v-if="loggedIn" class="me-2">
+                                <p class="d-inline">{{emailAdress}}</p>
+                                <img v-bind:src="profileImage" class="d-inline-block rounded-circle ms-2" width="50" height="50" />
+                            </div>
+                            <button v-if="loggedIn" v-on:click="submitLogout" class="btn btn-danger align-self-center" type="submit">Logout</button>
+                        </div>
+                        <div v-if="showError" class="alert alert-danger p-2 my-2">{{errorMessage}}</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+</div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - Pri.Api.Music.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/vue/vue.js"></script>
+    <script src="~/lib/axios/axios.js"></script>
+    <script src="~/js/products.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

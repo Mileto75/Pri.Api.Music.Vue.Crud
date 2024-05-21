@@ -1,0 +1,151 @@
+﻿
+<div v-if="loading" class="col col-lg-2 mx-auto text-center">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only"></span>
+    </div>
+</div>
+<div v-else>
+    <div v-if="isAdmin" class="row justify-content-center">
+        <div v-on:click="showAdminProducts" class="col col-lg-4"><button class="btn btn-outline-primary">Manage Records</button></div>
+        <div v-on:click="showAdminArtists" class="col col-lg-4"><button class="btn btn-outline-primary">Manage Artists</button></div>
+    </div>
+    <div v-if="loggedIn">
+        <button v-if="adminProductsVisible" v-on:click="toggleModal('addRecordModal')" type="button" class="btn btn-outline-primary mt-2">Create</button>
+        <div v-if="adminProductsVisible" class="row">
+            <div v-for="record in records" class="col col-lg-3 m-2">
+                <div class="card" style="width: 18rem;">
+                    <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
+                    <img v-bind:src="record.imageUrl" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">{{record.name}}</h5>
+                        <span v-if="isAdmin">
+                            <button type="button" class="btn btn-primary">Edit</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button v-if="adminArtistsVisible" v-on:click="toggleModal('addArtistModal')" type="button" class="btn btn-outline-primary mt-2">Create</button>
+        <div v-if="adminArtistsVisible" class="row">
+            <div v-for="artist in artists" class="col col-lg-3 m-1">
+                <div class="card" style="width: 18rem;">
+                    <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
+                    <img src="https://placehold.co/400" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">{{artist.name}}</h5>
+                        <span v-if="isAdmin">
+                            <button v-on:click="showEditArtistModal(artist.id)" type="button" class="btn btn-primary">Edit</button>
+                            <button v-on:click="deleteArtist(artist.id)" type="button" class="btn btn-danger">Delete</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* modals *@
+    <div class="modal fade" id="addArtistModal" tabindex="-1" role="dialog" aria-labelledby="addArtistModal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addArtistModalTitle">Create artist</h5>
+                </div>
+                <div class="modal-body">
+                    <!--Modal content-->
+                    <form v-on:submit.prevent="createArtist">
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input v-model="newArtist" type="text" class="form-control">
+                        </div>
+                        <button v-on:click="toggleModal('addArtistModal')" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Add artist modal *@
+
+    @* end Add artist modal *@
+    @* Add record modal *@
+    <div class="modal fade" id="addRecordModal" tabindex="-1" role="dialog" aria-labelledby="addrecordModal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addrecordModalTitle">Create record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--Modal content-->
+                    <form v-on:submit.prevent="createRecord">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" v-model="newRecord.title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" v-model="newRecord.price" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Genre</label>
+                            <select v-model="newRecord.genreId" class="form-select">
+                                <option v-bind:value="genre.id" v-for="genre in genres">{{genre.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Artist</label>
+                            <select v-model="newRecord.artistId" class="form-select">
+                                <option v-bind:value="artist.id" v-for="artist in artists">{{artist.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Properties</label>
+                            <select multiple v-model="newRecord.propertyIds" class="form-select">
+                                <option v-bind:value="property.id" v-for="property in properties">{{property.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" v-on:change="getFile($event)" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button v-on:click="toggleModal('addRecordModal')" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @* end Add record modal *@
+    @* edit Artist modal *@
+    <div class="modal fade" id="editArtistModal" tabindex="-1" role="dialog" aria-labelledby="addArtistModal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editArtistModalTitle">Create artist</h5>
+                </div>
+                <div class="modal-body">
+                    <!--Modal content-->
+                    <form v-on:submit.prevent="updateArtist">
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input v-model="selectedArtist.name" type="text" class="form-control">
+                        </div>
+                        <button v-on:click="toggleModal('editArtistModal')" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* end edit Artist modal *@
+    @* edit Record modal *@
+
+    @* end edit Record modal *@
+</div>
